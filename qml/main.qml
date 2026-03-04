@@ -381,32 +381,34 @@ ApplicationWindow {
             }
         }
 
-        MessageDialog {
+        Dialog {
             id: deadMessage
-            title: qsTr("Game Over")
-            text: qsTr("Game Over!")
-            buttons: MessageDialog.Retry | MessageDialog.Abort
-            onButtonClicked: function(button) {
-                if (button === MessageDialog.Retry)
-                    MyScript.startupFunction();
-                else
-                    MyScript.cleanUpAndQuit();
+            modal: true
+            anchors.centerIn: Overlay.overlay
+            standardButtons: Dialog.Retry | Dialog.Abort
+            Label {
+                text: qsTr("Game Over!")
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 24
+                font.bold: true
             }
+            onAccepted: MyScript.startupFunction()
+            onRejected: MyScript.cleanUpAndQuit()
         }
 
-        MessageDialog {
+        Dialog {
             id: winMessage
-            title: qsTr("You Win")
-            text: qsTr("You win! Continue playing?")
-            buttons: MessageDialog.Yes | MessageDialog.No
-            onButtonClicked: function(button) {
-                if (button === MessageDialog.Yes) {
-                    MyScript.checkTargetFlag = false;
-                    close();
-                } else {
-                    MyScript.startupFunction();
-                }
+            modal: true
+            anchors.centerIn: Overlay.overlay
+            standardButtons: Dialog.Yes | Dialog.No
+            Label {
+                text: qsTr("You win! Continue playing?")
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 24
+                font.bold: true
             }
+            onAccepted: { MyScript.checkTargetFlag = false; close() }
+            onRejected: MyScript.startupFunction()
         }
 
     }
