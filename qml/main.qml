@@ -51,10 +51,8 @@ ApplicationWindow {
                     ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[0] ? true : false
                     onTriggered: {
-                        if (MyScript.label !== MyScript.labelOptions[0]) {
-                            MyScript.label = MyScript.labelOptions[0];
-                            MyScript.startupFunction();
-                        }
+                        MyScript.label = MyScript.labelOptions[0];
+                        MyScript.startupFunction();
                     }
                 }
                 MenuItem {
@@ -63,10 +61,8 @@ ApplicationWindow {
                     ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[1] ? true : false
                     onTriggered: {
-                        if (MyScript.label !== MyScript.labelOptions[1]) {
-                            MyScript.label = MyScript.labelOptions[1];
-                            MyScript.startupFunction();
-                        }
+                        MyScript.label = MyScript.labelOptions[1];
+                        MyScript.startupFunction();
                     }
                 }
                 MenuItem {
@@ -75,10 +71,8 @@ ApplicationWindow {
                     ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[2] ? true : false
                     onTriggered: {
-                        if (MyScript.label !== MyScript.labelOptions[2]) {
-                            MyScript.label = MyScript.labelOptions[2];
-                            MyScript.startupFunction();
-                        }
+                        MyScript.label = MyScript.labelOptions[2];
+                        MyScript.startupFunction();
                     }
                 }
                 MenuItem {
@@ -87,10 +81,8 @@ ApplicationWindow {
                     ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[3] ? true : false
                     onTriggered: {
-                        if (MyScript.label !== MyScript.labelOptions[3]) {
-                            MyScript.label = MyScript.labelOptions[3];
-                            MyScript.startupFunction();
-                        }
+                        MyScript.label = MyScript.labelOptions[3];
+                        MyScript.startupFunction();
                     }
                 }
             }
@@ -102,10 +94,8 @@ ApplicationWindow {
                     ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "en_US" ? true : false
                     onTriggered: {
-                        if (settings.value("language") !== "en_US") {
-                            settings.setValue("language", "en_US");
-                            changeLanguageDialog.open();
-                        }
+                        settings.setValue("language", "en_US");
+                        changeLanguageDialog.open();
                     }
                 }
                 MenuItem {
@@ -114,10 +104,8 @@ ApplicationWindow {
                     ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "fr_FR" ? true : false
                     onTriggered: {
-                        if (settings.value("language") !== "fr_FR") {
-                            settings.setValue("language", "fr_FR");
-                            changeLanguageDialog.open();
-                        }
+                        settings.setValue("language", "fr_FR");
+                        changeLanguageDialog.open();
                     }
                 }
                 MenuItem {
@@ -126,10 +114,8 @@ ApplicationWindow {
                     ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "zh_CN" ? true : false
                     onTriggered: {
-                        if (settings.value("language") !== "zh_CN") {
-                            settings.setValue("language", "zh_CN");
-                            changeLanguageDialog.open();
-                        }
+                        settings.setValue("language", "zh_CN");
+                        changeLanguageDialog.open();
                     }
                 }
                 MenuItem {
@@ -138,10 +124,8 @@ ApplicationWindow {
                     ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "pl_PL" ? true : false
                     onTriggered: {
-                        if (settings.value("language") !== "pl_PL") {
-                            settings.setValue("language", "pl_PL");
-                            changeLanguageDialog.open();
-                        }
+                        settings.setValue("language", "pl_PL");
+                        changeLanguageDialog.open();
                     }
                 }
 
@@ -151,10 +135,8 @@ ApplicationWindow {
                     ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "ru_RU" ? true : false
                     onTriggered: {
-                        if (settings.value("language") !== "ru_RU") {
-                            settings.setValue("language", "ru_RU");
-                            changeLanguageDialog.open();
-                        }
+                        settings.setValue("language", "ru_RU");
+                        changeLanguageDialog.open();
                     }
                 }
                 MenuItem {
@@ -163,10 +145,8 @@ ApplicationWindow {
                     ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") == "de_DE" ?  true : false
                     onTriggered: {
-                        if (settings.value("language") != "de_DE") {
-                            settings.setValue("language", "de_DE");
-                            changeLanguageDialog.open();
-                        }
+                        settings.setValue("language", "de_DE");
+                        changeLanguageDialog.open();
                     }
                 }
             }
@@ -178,10 +158,8 @@ ApplicationWindow {
                     ButtonGroup.group: fontSettingsGroup
                     checked: settings.value("font", "system") == "system" ? true : false
                     onTriggered: {
-                        if (settings.value("font") != "system") {
-                            settings.setValue("font", "system");
-                            helper.fontFamily = "";
-                        }
+                        settings.setValue("font", "system");
+                        helper.fontFamily = "";
                     }
                 }
                 MenuItem {
@@ -190,10 +168,8 @@ ApplicationWindow {
                     ButtonGroup.group: fontSettingsGroup
                     checked: settings.value("font") == localFont.name ? true : false
                     onTriggered: {
-                        if (settings.value("font") != localFont.name) {
-                            settings.setValue("font", localFont.name);
-                            helper.fontFamily = localFont.name;
-                        }
+                        settings.setValue("font", localFont.name);
+                        helper.fontFamily = localFont.name;
                     }
                 }
             }
