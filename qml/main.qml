@@ -1,8 +1,7 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
-import QtQuick.Controls.Styles 1.1
-import QtQuick.Dialogs 1.1
-import QtQuick.Window 2.1
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Window
 import "2048.js" as MyScript
 
 ApplicationWindow {
@@ -16,20 +15,27 @@ ApplicationWindow {
     x: (Screen.width - width) / 2
     y: (Screen.height - height) / 2
 
-    ExclusiveGroup { id: labelSettingsGroup }
-    ExclusiveGroup { id: languageSettingsGroup }
+    ButtonGroup { id: labelSettingsGroup }
+    ButtonGroup { id: languageSettingsGroup }
+
+    Shortcut {
+        sequence: "Ctrl+N"
+        onActivated: MyScript.startupFunction()
+    }
+    Shortcut {
+        sequence: "Ctrl+Q"
+        onActivated: MyScript.cleanUpAndQuit()
+    }
 
     menuBar: MenuBar {
         Menu {
             title: qsTr("File")
             MenuItem {
                 text: qsTr("New Game")
-                shortcut: "Ctrl+N"
                 onTriggered: MyScript.startupFunction();
             }
             MenuItem {
                 text: qsTr("Exit")
-                shortcut: "Ctrl+Q"
                 onTriggered: MyScript.cleanUpAndQuit();
             }
         }
@@ -41,7 +47,7 @@ ApplicationWindow {
                 MenuItem {
                     text: qsTr("2048")
                     checkable: true
-                    exclusiveGroup: labelSettingsGroup
+                    ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[0] ? true : false
                     onTriggered: {
                         if (MyScript.label !== MyScript.labelOptions[0]) {
@@ -53,7 +59,7 @@ ApplicationWindow {
                 MenuItem {
                     text: qsTr("Degree")
                     checkable: true
-                    exclusiveGroup: labelSettingsGroup
+                    ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[1] ? true : false
                     onTriggered: {
                         if (MyScript.label !== MyScript.labelOptions[1]) {
@@ -65,7 +71,7 @@ ApplicationWindow {
                 MenuItem {
                     text: qsTr("Military Rank")
                     checkable: true
-                    exclusiveGroup: labelSettingsGroup
+                    ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[2] ? true : false
                     onTriggered: {
                         if (MyScript.label !== MyScript.labelOptions[2]) {
@@ -77,7 +83,7 @@ ApplicationWindow {
                 MenuItem {
                     text: qsTr("PRC")
                     checkable: true
-                    exclusiveGroup: labelSettingsGroup
+                    ButtonGroup.group: labelSettingsGroup
                     checked: MyScript.label === MyScript.labelOptions[3] ? true : false
                     onTriggered: {
                         if (MyScript.label !== MyScript.labelOptions[3]) {
@@ -92,7 +98,7 @@ ApplicationWindow {
                 MenuItem {
                     text: "English"
                     checkable: true
-                    exclusiveGroup: languageSettingsGroup
+                    ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "en_US" ? true : false
                     onTriggered: {
                         if (settings.value("language") !== "en_US") {
@@ -104,7 +110,7 @@ ApplicationWindow {
                 MenuItem {
                     text: "Français"
                     checkable: true
-                    exclusiveGroup: languageSettingsGroup
+                    ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "fr_FR" ? true : false
                     onTriggered: {
                         if (settings.value("language") !== "fr_FR") {
@@ -116,7 +122,7 @@ ApplicationWindow {
                 MenuItem {
                     text: "简体中文"
                     checkable: true
-                    exclusiveGroup: languageSettingsGroup
+                    ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "zh_CN" ? true : false
                     onTriggered: {
                         if (settings.value("language") !== "zh_CN") {
@@ -128,7 +134,7 @@ ApplicationWindow {
                 MenuItem {
                     text: "Polski"
                     checkable: true
-                    exclusiveGroup: languageSettingsGroup
+                    ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "pl_PL" ? true : false
                     onTriggered: {
                         if (settings.value("language") !== "pl_PL") {
@@ -141,7 +147,7 @@ ApplicationWindow {
                 MenuItem {
                     text: "Русский"
                     checkable: true
-                    exclusiveGroup: languageSettingsGroup
+                    ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") === "ru_RU" ? true : false
                     onTriggered: {
                         if (settings.value("language") !== "ru_RU") {
@@ -153,7 +159,7 @@ ApplicationWindow {
                 MenuItem {
                     text: "German"
                     checkable: true
-                    exclusiveGroup: languageSettingsGroup
+                    ButtonGroup.group: languageSettingsGroup
                     checked: settings.value("language") == "de_DE" ?  true : false
                     onTriggered: {
                         if (settings.value("language") != "de_DE") {
@@ -200,7 +206,7 @@ ApplicationWindow {
         anchors.centerIn: parent
 
         focus: true
-        Keys.onPressed: MyScript.moveKey(event)
+        Keys.onPressed: function(event) { MyScript.moveKey(event) }
 
         MouseArea {
             anchors.fill: parent
@@ -299,26 +305,25 @@ ApplicationWindow {
         }
 
         Button {
-            width: 129
-            height: 40
-            y: 90
-            anchors.right: parent.right
-
-            style: ButtonStyle {
+                width: 129
+                height: 40
+                y: 90
+                anchors.right: parent.right
+                text: qsTr("New Game")
+                onClicked: MyScript.startupFunction()
                 background: Rectangle {
-                    color: helper.myColors.bgbutton
-                    radius: 3
-                    Text{
-                        anchors.centerIn: parent
-                        text: qsTr("New Game")
+                        color: helper.myColors.bgbutton
+                        radius: 3
+                }
+                contentItem: Text {
+                        text: parent.text
                         color: helper.myColors.fgbutton
                         font.family: localFont.name
                         font.pixelSize: 18
                         font.bold: true
-                    }
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                 }
-            }
-            onClicked: MyScript.startupFunction()
         }
 
         Rectangle {
@@ -329,7 +334,6 @@ ApplicationWindow {
             radius: 6
 
             Grid {
-                id: tileGrid
                 x: 15;
                 y: 15;
                 rows: 4; columns: 4; spacing: 15
@@ -344,46 +348,64 @@ ApplicationWindow {
                     }
                 }
             }
+
+            Item {
+                id: tileGrid
+                x: 15
+                y: 15
+                width: 425
+                height: 425
+            }
+
         }
 
-        MessageDialog {
+        Dialog {
             id: changeLanguageDialog
             title: qsTr("Language Setting Hint")
-            text: qsTr("Please restart the program to make the language setting take effect.")
-            standardButtons: StandardButton.Ok
+            modal: true
+            anchors.centerIn: Overlay.overlay
+            standardButtons: Dialog.Ok
+            Label {
+                text: qsTr("Please restart the program to make the language setting take effect.")
+            }
         }
 
-        MessageDialog {
+        Dialog {
             id: aboutDialog
             title: qsTr("About 2048-Qt")
-            text: qsTr("<p style='font-weight: bold; font-size: 24px'>2048-Qt</p><p>Version " + settings.getVersion() + "</p><p>2015 Qiaoyong Zhong &lt;solary.sh@gmail.com&gt;</p>")
-            standardButtons: StandardButton.Ok
+            modal: true
+            anchors.centerIn: Overlay.overlay
+            standardButtons: Dialog.Ok
+            Label {
+                text: qsTr("2048-Qt\nVersion " + settings.getVersion() + "\n2015 Qiaoyong Zhong")
+            }
         }
 
         MessageDialog {
             id: deadMessage
             title: qsTr("Game Over")
             text: qsTr("Game Over!")
-            standardButtons: StandardButton.Retry | StandardButton.Abort
-            onAccepted: {
-                MyScript.startupFunction();
+            buttons: MessageDialog.Retry | MessageDialog.Abort
+            onButtonClicked: function(button) {
+                if (button === MessageDialog.Retry)
+                    MyScript.startupFunction();
+                else
+                    MyScript.cleanUpAndQuit();
             }
-            onRejected: MyScript.cleanUpAndQuit();
         }
 
         MessageDialog {
             id: winMessage
             title: qsTr("You Win")
             text: qsTr("You win! Continue playing?")
-            standardButtons: StandardButton.Yes | StandardButton.No
-            onYes: {
-                MyScript.checkTargetFlag = false;
-                close()
-            }
-            onNo: MyScript.startupFunction()
-            onRejected: {
-                MyScript.checkTargetFlag = false;
-                close()
+            buttons: MessageDialog.Yes | MessageDialog.No
+            onButtonClicked: function(button) {
+                if (button === MessageDialog.Yes) {
+                    MyScript.checkTargetFlag = false;
+                    close();
+                } else {
+                    MyScript.startupFunction();
+                }
             }
         }
 
