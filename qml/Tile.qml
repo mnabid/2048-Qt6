@@ -20,7 +20,7 @@ Rectangle {
         id: tileLabel
         text: tileText
         color: tileColor
-        font.family: localFont.name
+        font.family: helper.fontFamily
         font.pixelSize: tileFontSize
         font.bold: true
         anchors.centerIn: parent

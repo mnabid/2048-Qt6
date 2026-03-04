@@ -17,6 +17,7 @@ ApplicationWindow {
 
     ButtonGroup { id: labelSettingsGroup }
     ButtonGroup { id: languageSettingsGroup }
+    ButtonGroup { id: fontSettingsGroup }
 
     Shortcut {
         sequence: "Ctrl+N"
@@ -169,6 +170,33 @@ ApplicationWindow {
                     }
                 }
             }
+            Menu {
+                title: qsTr("Font")
+                MenuItem {
+                    text: qsTr("Use System Font")
+                    checkable: true
+                    ButtonGroup.group: fontSettingsGroup
+                    checked: settings.value("font", "system") == "system" ? true : false
+                    onTriggered: {
+                        if (settings.value("font") != "system") {
+                            settings.setValue("font", "system");
+                            helper.fontFamily = "";
+                        }
+                    }
+                }
+                MenuItem {
+                    text: qsTr("Droid Sans Fallback")
+                    checkable: true
+                    ButtonGroup.group: fontSettingsGroup
+                    checked: settings.value("font") == localFont.name ? true : false
+                    onTriggered: {
+                        if (settings.value("font") != localFont.name) {
+                            settings.setValue("font", localFont.name);
+                            helper.fontFamily = localFont.name;
+                        }
+                    }
+                }
+            }
         }
 
         Menu {
@@ -189,6 +217,7 @@ ApplicationWindow {
     Item {
         id: helper
         focus: false
+        property string fontFamily: settings.value("font", "system") == "system" ? "" : settings.value("font", "system")
         property var myColors: {"bglight": "#FAF8EF",
                                 "bggray": Qt.rgba(238/255, 228/255, 218/255, 0.35),
                                 "bgdark": "#BBADA0",
@@ -217,7 +246,7 @@ ApplicationWindow {
 
         Text {
             id: gameName
-            font.family: localFont.name
+            font.family: helper.fontFamily
             font.pixelSize: 55
             font.bold: true
             text: "2048"
@@ -240,7 +269,7 @@ ApplicationWindow {
                         text: (index == 0) ? qsTr("SCORE") : qsTr("BEST")
                         anchors.horizontalCenter: parent.horizontalCenter
                         y: 6
-                        font.family: localFont.name
+                        font.family: helper.fontFamily
                         font.pixelSize: 13
                         color: helper.myColors.fglight
                     }
@@ -248,7 +277,7 @@ ApplicationWindow {
                         text: scoreText
                         anchors.horizontalCenter: parent.horizontalCenter
                         y: 22
-                        font.family: localFont.name
+                        font.family: helper.fontFamily
                         font.pixelSize: 25
                         font.bold: true
                         color: "white"
@@ -258,7 +287,7 @@ ApplicationWindow {
 
             Text {
                 id: addScoreText
-                font.family: localFont.name
+                font.family: helper.fontFamily
                 font.pixelSize: 25
                 font.bold: true
                 color: Qt.rgba(119/255, 110/255, 101/255, 0.9);
@@ -299,7 +328,7 @@ ApplicationWindow {
             height: 40
             text: qsTr("Join the numbers and get to the <b>2048 tile</b>!")
             color: helper.myColors.fgdark
-            font.family: localFont.name
+            font.family: helper.fontFamily
             font.pixelSize: 16
             verticalAlignment: Text.AlignVCenter
         }
@@ -318,7 +347,7 @@ ApplicationWindow {
                 contentItem: Text {
                         text: parent.text
                         color: helper.myColors.fgbutton
-                        font.family: localFont.name
+                        font.family: helper.fontFamily
                         font.pixelSize: 18
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
