@@ -322,8 +322,10 @@ function isDead() {
 }
 
 function computeTileStyle(n, tileText) {
-    var fgColors = ["#776E62", "#F9F6F2"];
-    var bgColors = ["#EEE4DA", "#EDE0C8", "#F2B179", "#F59563", "#F67C5F", "#F65E3B", "#EDCF72", "#EDCC61", "#EDC850", "#EDC53F", "#EDC22E", "#3C3A32"];
+    var bgColorsLight = ["#EEE4DA", "#EDE0C8", "#F2B179", "#F59563", "#F67C5F", "#F65E3B", "#EDCF72", "#EDCC61", "#EDC850", "#EDC53F", "#EDC22E", "#3C3A32"];
+    var bgColorsDark  = ["#6B4C35", "#8B5E35", "#C87941", "#D4863A", "#C95B2A", "#B33A1E", "#C9A227", "#B8911F", "#A67C18", "#906808", "#7A5800", "#55524A"];
+    var bgColors = (helper.themeMode === "dark") ? bgColorsDark : bgColorsLight;
+    var fgColors = (helper.themeMode === "dark") ? ["#C8C0B0", "#F9F6F2"] : ["#776E62", "#F9F6F2"];
     var sty = {bgColor: helper.myColors.bggray,
                fgColor: fgColors[0],
                fontSize: 55 };
@@ -458,6 +460,20 @@ function moveMergeTilesUpDown(i, v, v2, indices, up) {
                 tileItems[gridSize*indices[j]+i] = tileItems[gridSize*j+i];
             }
             tileItems[gridSize*j+i] = null;
+        }
+    }
+}
+
+function refreshTileColors() {
+    for (var i = 0; i < Math.pow(gridSize, 2); i++) {
+        var tile = tileItems[i];
+        if (tile !== null && tile !== undefined) {
+            var n = cellValues[Math.floor(i / gridSize)][i % gridSize];
+            var tileText = labelFunc[label](n);
+            var sty = computeTileStyle(n, tileText);
+            tile.color = sty.bgColor;
+            tile.tileColor = sty.fgColor;
+            tile.tileFontSize = sty.fontSize;
         }
     }
 }

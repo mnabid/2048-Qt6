@@ -17,6 +17,7 @@ ApplicationWindow {
 
     ButtonGroup { id: labelSettingsGroup }
     ButtonGroup { id: languageSettingsGroup }
+    ButtonGroup { id: themeSettingsGroup }
     ButtonGroup { id: fontSettingsGroup }
 
     Shortcut {
@@ -151,6 +152,29 @@ ApplicationWindow {
                 }
             }
             Menu {
+                title: qsTr("Theme")
+                MenuItem {
+                    text: qsTr("Light")
+                    checkable: true
+                    ButtonGroup.group: themeSettingsGroup
+                    checked: helper.themeMode === "light"
+                    onTriggered: {
+                        helper.themeMode = "light";
+                        settings.setValue("theme", "light");
+                    }
+                }
+                MenuItem {
+                    text: qsTr("Dark")
+                    checkable: true
+                    ButtonGroup.group: themeSettingsGroup
+                    checked: helper.themeMode === "dark"
+                    onTriggered: {
+                        helper.themeMode = "dark";
+                        settings.setValue("theme", "dark");
+                    }
+                }
+            }
+            Menu {
                 title: qsTr("Font")
                 MenuItem {
                     text: qsTr("Use System Font")
@@ -158,8 +182,8 @@ ApplicationWindow {
                     ButtonGroup.group: fontSettingsGroup
                     checked: settings.value("font", "system") == "system" ? true : false
                     onTriggered: {
-                        settings.setValue("font", "system");
                         helper.fontFamily = "";
+                        settings.setValue("font", "system");
                     }
                 }
                 MenuItem {
@@ -168,8 +192,8 @@ ApplicationWindow {
                     ButtonGroup.group: fontSettingsGroup
                     checked: settings.value("font") == localFont.name ? true : false
                     onTriggered: {
-                        settings.setValue("font", localFont.name);
                         helper.fontFamily = localFont.name;
+                        settings.setValue("font", localFont.name);
                     }
                 }
             }
@@ -194,14 +218,27 @@ ApplicationWindow {
         id: helper
         focus: false
         property string fontFamily: settings.value("font", "system") == "system" ? "" : settings.value("font", "system")
-        property var myColors: {"bglight": "#FAF8EF",
-                                "bggray": Qt.rgba(238/255, 228/255, 218/255, 0.35),
-                                "bgdark": "#BBADA0",
-                                "fglight": "#EEE4DA",
-                                "fgdark": "#776E62",
-                                "bgbutton": "#8F7A66", // Background color for the "New Game" button
-                                "fgbutton": "#F9F6F2" // Foreground color for the "New Game" button
+        property string themeMode: settings.value("theme", "light")
+        onThemeModeChanged: MyScript.refreshTileColors()
+        property var lightColors: {
+            "bglight":  "#FAF8EF",
+            "bggray":   Qt.rgba(238/255, 228/255, 218/255, 0.35),
+            "bgdark":   "#BBADA0",
+            "fglight":  "#EEE4DA",
+            "fgdark":   "#776E62",
+            "bgbutton": "#8F7A66",
+            "fgbutton": "#F9F6F2"
         }
+        property var darkColors: {
+            "bglight":  "#1A1714",
+            "bggray":   Qt.rgba(255/255, 220/255, 180/255, 0.07),
+            "bgdark":   "#252220",
+            "fglight":  "#E8D5BC",
+            "fgdark":   "#C4B49A",
+            "bgbutton": "#7A6555",
+            "fgbutton": "#F0E6D6"
+        }
+        property var myColors: themeMode === "dark" ? darkColors : lightColors
     }
     color: helper.myColors.bglight
 
@@ -256,7 +293,7 @@ ApplicationWindow {
                         font.family: helper.fontFamily
                         font.pixelSize: 25
                         font.bold: true
-                        color: "white"
+                        color: helper.myColors.fglight
                     }
                 }
             }
