@@ -33,6 +33,11 @@ ApplicationWindow {
         Menu {
             title: qsTr("File")
             MenuItem {
+                text: qsTr("Restore Demo Mode")
+                visible: demoMode
+                onTriggered: MyScript.startupDemoFunction();
+            }
+            MenuItem {
                 text: qsTr("New Game")
                 onTriggered: MyScript.startupFunction();
             }
@@ -401,6 +406,18 @@ ApplicationWindow {
 
         }
 
+
+        Dialog {
+            id: demoWarningDialog
+            title: qsTr("Demo Mode")
+            modal: true
+            anchors.centerIn: Overlay.overlay
+            standardButtons: Dialog.Ok
+            Label {
+                text: qsTr("Running in demo mode.\nNo settings or scores will be saved.")
+            }
+        }
+
         Dialog {
             id: changeLanguageDialog
             title: qsTr("Language Setting Hint")
@@ -455,5 +472,12 @@ ApplicationWindow {
 
     }
 
-    Component.onCompleted: MyScript.startupFunction();
+    Component.onCompleted: {
+        if (demoMode) {
+            MyScript.startupDemoFunction();
+            demoWarningDialog.open();
+        } else {
+            MyScript.startupFunction();
+        }
+    }
 }

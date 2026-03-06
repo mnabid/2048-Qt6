@@ -42,6 +42,39 @@ var labelFunc = {
     }
 }
 
+function startupDemoFunction() {
+    score = 2048;
+    bestScore = 32768;
+    checkTargetFlag = true;
+    var i, j;
+
+    cellValues = new Array(gridSize);
+    for (i = 0; i < gridSize; i++) {
+        cellValues[i] = new Array(gridSize);
+        for (j = 0; j < gridSize; j++)
+            cellValues[i][j] = 0;
+    }
+
+    for (i = 0; i < Math.pow(gridSize, 2); i++) {
+        try { tileItems[i].destroy(); } catch(e) {}
+        tileItems[i] = null;
+    }
+
+    // Rows 0-2: tile levels 1-12 (values 2 through 4096)
+    // Row 3: empty, so movement keys still work
+    for (i = 0; i < 12; i++) {
+        var row = Math.floor(i / gridSize);
+        var col = i % gridSize;
+        cellValues[row][col] = i + 1;
+        tileItems[row * gridSize + col] = createTileObject(row * gridSize + col, i + 1, true);
+    }
+
+    updateAvailableCells();
+    updateScore(score);
+    addScoreText.parent = scoreBoard.itemAt(0);
+
+    console.log("Started in demo mode");
+}
 
 function startupFunction() {
     // Initialize variables

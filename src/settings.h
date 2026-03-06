@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE QString getVersion();
 
     void setVersion(const QString version);
+    void setDemoMode(bool demo);
     bool contains(const QString & key) const;
 
 signals:
@@ -25,6 +26,7 @@ public slots:
 private:
     QSettings *settings_;
     QString appVersion;
+    bool demoMode_;
 };
 
 #endif // SETTINGS_H

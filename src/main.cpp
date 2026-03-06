@@ -12,6 +12,10 @@ int main(int argc, char *argv[])
     Settings settings(0, "2048-qt", "2048-Qt");
     settings.setVersion(QString(APP_VERSION));
 
+    // Demo mode
+    bool demoMode = app.arguments().contains("--demo");
+    settings.setDemoMode(demoMode);
+
     // Localization
     QString locale;
     if (settings.contains("language")) {
@@ -41,6 +45,7 @@ int main(int argc, char *argv[])
 
     // Access C++ object "settings" from QML as "settings"
     engine.rootContext()->setContextProperty("settings", &settings);
+    engine.rootContext()->setContextProperty("demoMode", demoMode);
 
     engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));
 
