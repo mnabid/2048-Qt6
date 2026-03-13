@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
+import QtQuick.Effects
 import QtQuick.Window
 import "2048.js" as MyScript
 
@@ -232,6 +233,8 @@ ApplicationWindow {
             "fglight":  "#EEE4DA",
             "fgdark":   "#776E62",
             "bgbutton": "#8F7A66",
+            "bgbuttonHover": "#9E8B78",
+            "bgbuttonPress": "#7A6858",
             "fgbutton": "#F9F6F2"
         }
         property var darkColors: {
@@ -241,6 +244,8 @@ ApplicationWindow {
             "fglight":  "#E8D5BC",
             "fgdark":   "#C4B49A",
             "bgbutton": "#7A6555",
+            "bgbuttonHover": "#8A7464",
+            "bgbuttonPress": "#675244",
             "fgbutton": "#F0E6D6"
         }
         property var myColors: themeMode === "dark" ? darkColors : lightColors
@@ -264,14 +269,16 @@ ApplicationWindow {
 
         Text {
             id: gameName
+            anchors.verticalCenter: scoreRow.verticalCenter
             font.family: helper.fontFamily
-            font.pixelSize: 55
+            font.pixelSize: 75
             font.bold: true
             text: "2048"
             color: helper.myColors.fgdark
         }
 
         Row {
+            id: scoreRow
             anchors.right: parent.right
             spacing: 5
             Repeater {
@@ -280,7 +287,7 @@ ApplicationWindow {
                 Rectangle {
                     width: (index == 0) ? 95 : 125
                     height: 55
-                    radius: 3
+                    radius: 8
                     color: helper.myColors.bgdark
                     property string scoreText: (index === 0) ? MyScript.score.toString() : MyScript.bestScore.toString()
                     Text {
@@ -352,6 +359,7 @@ ApplicationWindow {
         }
 
         Button {
+                id: newGameButton
                 width: 129
                 height: 40
                 y: 90
@@ -359,8 +367,11 @@ ApplicationWindow {
                 text: qsTr("New Game")
                 onClicked: MyScript.startupFunction()
                 background: Rectangle {
-                        color: helper.myColors.bgbutton
-                        radius: 3
+                        color: newGameButton.pressed ? helper.myColors.bgbuttonPress
+                             : newGameButton.hovered ? helper.myColors.bgbuttonHover
+                             : helper.myColors.bgbutton
+                        radius: 8
+                        Behavior on color { ColorAnimation { duration: 120 } }
                 }
                 contentItem: Text {
                         text: parent.text
@@ -374,11 +385,34 @@ ApplicationWindow {
         }
 
         Rectangle {
+            id: boardShadowSource
+            y: 170
+            width: 500
+            height: 500
+            radius: 20
+            color: helper.myColors.bgdark
+            visible: false
+        }
+
+        MultiEffect {
+            source: boardShadowSource
+            x: boardShadowSource.x
+            y: boardShadowSource.y
+            width: boardShadowSource.width
+            height: boardShadowSource.height
+            autoPaddingEnabled: true
+            shadowEnabled: true
+            shadowColor: helper.themeMode === "dark" ? Qt.rgba(0, 0, 0, 0.55) : Qt.rgba(0, 0, 0, 0.25)
+            shadowVerticalOffset: 4
+            shadowBlur: 0.7
+        }
+
+        Rectangle {
             y: 170
             width: 500
             height: 500
             color: helper.myColors.bgdark
-            radius: 6
+            radius: 20
 
             Grid {
                 x: 15;
@@ -390,7 +424,7 @@ ApplicationWindow {
                     model: 16
                     Rectangle {
                         width: 425/4; height: 425/4
-                        radius: 3
+                        radius: 8
                         color: helper.myColors.bggray
                     }
                 }

@@ -1,11 +1,20 @@
 import QtQuick
+import QtQuick.Effects
 
 Rectangle {
     id: tileContainer
     width: 425/4
     height: 425/4
-    radius: 3
+    radius: 10
     color: "white"
+    layer.enabled: true
+    layer.effect: MultiEffect {
+        shadowEnabled: true
+        shadowColor: helper.themeMode === "dark" ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0, 0, 0, 0.18)
+        shadowVerticalOffset: 2
+        shadowBlur: 0.5
+    }
+
     property string tileText: ""
     property int tileFontSize: 55
     property color tileColor: "black"
