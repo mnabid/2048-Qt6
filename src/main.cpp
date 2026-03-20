@@ -3,8 +3,10 @@
 #include <QQmlContext>
 #include <QTranslator>
 #include <QDebug>
+#include <QUrl>
 #include "myclass.h"
 #include "settings.h"
+#include "session.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +17,12 @@ int main(int argc, char *argv[])
     // Demo mode
     bool demoMode = app.arguments().contains("--demo");
     settings.setDemoMode(demoMode);
+
+    // Session
+    Session session;
+    if (!demoMode) {
+        session.load();
+    }
 
     // Localization
     QString locale;
@@ -45,6 +53,7 @@ int main(int argc, char *argv[])
 
     // Access C++ object "settings" from QML as "settings"
     engine.rootContext()->setContextProperty("settings", &settings);
+    engine.rootContext()->setContextProperty("session", &session);
     engine.rootContext()->setContextProperty("demoMode", demoMode);
 
     engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));

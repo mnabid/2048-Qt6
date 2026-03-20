@@ -1,5 +1,5 @@
 var score = 0;
-var bestScore = settings.value("bestScore", 0);
+var bestScore = session.bestScore;
 
 var gridSize = 4;
 var cellValues;
@@ -79,7 +79,7 @@ function startupDemoFunction() {
     console.log("Started in demo mode");
 }
 
-function startupFunction() {
+function startupFunction(forceNewGame) {
     // Initialize variables
     score = 0;
     checkTargetFlag = true;
@@ -102,19 +102,41 @@ function startupFunction() {
     }
 
     updateAvailableCells();
-    createNewTileItems(true);
+
+    var hasSavedTiles = false;
+    if (session.cells.length > 0) {
+        for (i = 0; i < Math.pow(gridSize, 2); i++) {
+            if (session.cells[i] > 0) {
+                hasSavedTiles = true;
+                break;
+            }
+        }
+    }
+
+    if (!forceNewGame && hasSavedTiles) {
+        console.log("Restoring session");
+        score = session.score;
+        bestScore = session.bestScore;
+        for (i = 0; i < Math.pow(gridSize, 2); i++) {
+            var val = session.cells[i];
+            var row = Math.floor(i / gridSize);
+            var col = i % gridSize;
+            cellValues[row][col] = val;
+            if (val > 0) {
+                tileItems[i] = createTileObject(i, val, true);
+            }
+        }
+        updateAvailableCells();
+    } else {
+        console.log("Starting a new game");
+        createNewTileItems(true);
+    }
+
     updateScore(0);
     addScoreText.parent = scoreBoard.itemAt(0);
 
-    // Save the currently achieved best score
-    if (bestScore > settings.value("bestScore", 0)) {
-        console.log("Updating new high score...");
-        settings.setValue("bestScore", bestScore);
-    }
     if (label !== settings.value("label", "2048"))
         settings.setValue("label", label);
-
-    console.log("Started a new game");
 }
 
 function moveKey(event) {
@@ -517,10 +539,16 @@ function refreshTileColors() {
 }
 
 function cleanUpAndQuit() {
-    if (bestScore > settings.value("bestScore", 0)) {
-        console.log("Updating new high score...");
-        settings.setValue("bestScore", bestScore);
+    if (!demoMode) {
+        var flatCells = [];
+        for (var i = 0; i < gridSize; i++) {
+            for (var j = 0; j < gridSize; j++) {
+                flatCells.push(cellValues[i][j]);
+            }
+        }
+        session.save(score, bestScore, flatCells, isDead());
     }
+
     if (label !== settings.value("label", "2048"))
         settings.setValue("label", label);
     Qt.quit();

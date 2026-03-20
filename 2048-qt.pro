@@ -5,7 +5,8 @@ QT += qml quick widgets
 SOURCES += \
     src/main.cpp \
     src/myclass.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/session.cpp
 
 lupdate_only {
 SOURCES += qml/main.qml \
@@ -28,7 +29,8 @@ macx: ICON = res/icons/2048-qt.ico # On Mac OSX
 
 HEADERS += \
     src/settings.h \
-    src/myclass.h
+    src/myclass.h \
+    src/session.h
 
 TRANSLATIONS = ts/2048-qt_de_DE.ts ts/2048-qt_fr_FR.ts ts/2048-qt_pl_PL.ts ts/2048-qt_ru_RU.ts ts/2048-qt_zh_CN.ts
 

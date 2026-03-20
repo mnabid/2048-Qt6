@@ -16,6 +16,8 @@ ApplicationWindow {
     x: (Screen.width - width) / 2
     y: (Screen.height - height) / 2
 
+    onClosing: MyScript.cleanUpAndQuit()
+
     ButtonGroup { id: labelSettingsGroup }
     ButtonGroup { id: languageSettingsGroup }
     ButtonGroup { id: themeSettingsGroup }
@@ -23,7 +25,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: "Ctrl+N"
-        onActivated: MyScript.startupFunction()
+        onActivated: MyScript.startupFunction(true)
     }
     Shortcut {
         sequence: "Ctrl+Q"
@@ -40,7 +42,7 @@ ApplicationWindow {
             }
             MenuItem {
                 text: qsTr("New Game")
-                onTriggered: MyScript.startupFunction();
+                onTriggered: MyScript.startupFunction(true);
             }
             MenuItem {
                 text: qsTr("Exit")
@@ -59,7 +61,7 @@ ApplicationWindow {
                     checked: MyScript.label === MyScript.labelOptions[0] ? true : false
                     onTriggered: {
                         MyScript.label = MyScript.labelOptions[0];
-                        MyScript.startupFunction();
+                        MyScript.startupFunction(true);
                     }
                 }
                 MenuItem {
@@ -69,7 +71,7 @@ ApplicationWindow {
                     checked: MyScript.label === MyScript.labelOptions[1] ? true : false
                     onTriggered: {
                         MyScript.label = MyScript.labelOptions[1];
-                        MyScript.startupFunction();
+                        MyScript.startupFunction(true);
                     }
                 }
                 MenuItem {
@@ -79,7 +81,7 @@ ApplicationWindow {
                     checked: MyScript.label === MyScript.labelOptions[2] ? true : false
                     onTriggered: {
                         MyScript.label = MyScript.labelOptions[2];
-                        MyScript.startupFunction();
+                        MyScript.startupFunction(true);
                     }
                 }
                 MenuItem {
@@ -89,7 +91,7 @@ ApplicationWindow {
                     checked: MyScript.label === MyScript.labelOptions[3] ? true : false
                     onTriggered: {
                         MyScript.label = MyScript.labelOptions[3];
-                        MyScript.startupFunction();
+                        MyScript.startupFunction(true);
                     }
                 }
             }
@@ -365,7 +367,7 @@ ApplicationWindow {
                 y: 90
                 anchors.right: parent.right
                 text: qsTr("New Game")
-                onClicked: MyScript.startupFunction()
+                onClicked: MyScript.startupFunction(true)
                 background: Rectangle {
                         color: newGameButton.pressed ? helper.myColors.bgbuttonPress
                              : newGameButton.hovered ? helper.myColors.bgbuttonHover
@@ -485,7 +487,7 @@ ApplicationWindow {
                 font.pixelSize: 24
                 font.bold: true
             }
-            onAccepted: MyScript.startupFunction()
+            onAccepted: MyScript.startupFunction(true)
             onRejected: MyScript.cleanUpAndQuit()
         }
 
@@ -501,7 +503,7 @@ ApplicationWindow {
                 font.bold: true
             }
             onAccepted: { MyScript.checkTargetFlag = false; close() }
-            onRejected: MyScript.startupFunction()
+            onRejected: MyScript.startupFunction(true)
         }
 
     }
@@ -511,7 +513,7 @@ ApplicationWindow {
             MyScript.startupDemoFunction();
             demoWarningDialog.open();
         } else {
-            MyScript.startupFunction();
+            MyScript.startupFunction(false);
         }
     }
 }
