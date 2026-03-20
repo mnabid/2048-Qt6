@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     }
 
     QTranslator translator;
-    if (! locale.startsWith("en")) {
+    if (!locale.startsWith("en")) {
         QString tsFile = "2048-qt_" + locale;
 
         if (translator.load(tsFile, ":/ts")) {
