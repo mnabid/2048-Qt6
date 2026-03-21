@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-03-21 0.1.7
+* Ported to Qt 6
+* Added demo mode for testing purposes
+* Added session management and autosave feature
+* Visual enhancements: rounded corners and drop shadows
+* Refactored dialogs for better UI and keyboard interaction
+* General code cleanup and modernization
+
 ## 2015-09-19 0.1.6
 * added French, German, Polish translation
 * put config file in `~/.config/2048-qt/` instead of `~/.config/xiaoyong/`

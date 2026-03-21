@@ -2,6 +2,9 @@
 
 A clone of [2048](https://github.com/gabrielecirulli/2048), implemented in Qt.
 
+> [!NOTE]
+> This is a fork of the original [2048-Qt](https://github.com/xiaoyong/2048-Qt) project with several improvements.
+
 ## Features
 
 - Cross platform  
@@ -21,15 +24,15 @@ A clone of [2048](https://github.com/gabrielecirulli/2048), implemented in Qt.
 
 ## Screenshots
 
-- Classical 2048
-  ![Screenshot of Classical 2048](http://i1171.photobucket.com/albums/r546/xiaoyong/2048_zps8b4bad15.png)
+- Light Mode
+  ![Screenshot of 2048-Qt Light Mode](res/screenshots/screenshot_light.png)
 
-- 2048 Degree
-  ![Screenshot of 2048 Degree](http://i1171.photobucket.com/albums/r546/xiaoyong/2048_degree_zpsb142af1f.png)
+- Dark Mode
+  ![Screenshot of 2048-Qt Dark Mode](res/screenshots/screenshot_dark.png)
 
 ## Downloads
 
-Check https://github.com/xiaoyong/2048-Qt/releases for compiled binary executable files. 
+Check [releases](https://github.com/mnabid/2048-Qt6/releases) for compiled binary executable files.
 
 ### Windows
 
