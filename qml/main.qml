@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Dialogs
 import QtQuick.Effects
 import QtQuick.Window
 import "2048.js" as MyScript
@@ -10,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 550
     height: 740
-    title: qsTr("2048 Game");
+    title: qsTr("2048 Game")
 //    flags: Qt.Window | Qt.WindowTitleHint  | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint | Qt.CustomizeWindowHint
 
     x: (Screen.width - width) / 2
@@ -22,6 +21,105 @@ ApplicationWindow {
     ButtonGroup { id: languageSettingsGroup }
     ButtonGroup { id: themeSettingsGroup }
     ButtonGroup { id: fontSettingsGroup }
+
+    component GameDialog : Dialog {
+        id: root
+        modal: true
+        x: Math.round((parent.width - width) / 2)
+        y: Math.round((parent.height - height) / 2)
+        focus: true
+
+        palette.windowText: helper.myColors.fgdark
+        palette.window: helper.myColors.bglight
+
+        background: Rectangle {
+            implicitWidth: 400
+            color: helper.myColors.bglight
+            radius: 15
+            border.color: helper.myColors.bgdark
+            border.width: 1
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                shadowEnabled: true
+                shadowColor: helper.themeMode === "dark" ? Qt.rgba(0, 0, 0, 0.6) : Qt.rgba(0, 0, 0, 0.2)
+                shadowBlur: 0.7
+                shadowVerticalOffset: 3
+            }
+        }
+
+        header: Label {
+            text: root.title
+            visible: text.length > 0
+            font.family: helper.fontFamily
+            font.pixelSize: 22
+            font.bold: true
+            color: helper.myColors.fgdark
+            padding: 20
+            topPadding: 25
+            bottomPadding: 10
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        footer: DialogButtonBox {
+            visible: count > 0
+            background: Rectangle { color: "transparent" }
+            alignment: Qt.AlignHCenter
+            topPadding: 10
+            bottomPadding: 20
+            delegate: Button {
+                id: button
+                contentItem: Text {
+                    text: button.text
+                    font.family: helper.fontFamily
+                    font.pixelSize: 16
+                    font.bold: true
+                    color: helper.myColors.fgbutton
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    implicitWidth: 100
+                    implicitHeight: 40
+                    color: button.pressed ? helper.myColors.bgbuttonPress
+                         : button.hovered ? helper.myColors.bgbuttonHover
+                         : helper.myColors.bgbutton
+                    radius: 8
+                    Behavior on color { ColorAnimation { duration: 120 } }
+                }
+            }
+        }
+
+        Shortcut {
+            sequence: "Return"
+            context: Qt.WindowShortcut
+            enabled: root.visible
+            onActivated: root.accept()
+        }
+        Shortcut {
+            sequence: "Enter"
+            context: Qt.WindowShortcut
+            enabled: root.visible
+            onActivated: root.accept()
+        }
+        Shortcut {
+            sequence: "Escape"
+            context: Qt.WindowShortcut
+            enabled: root.visible
+            onActivated: root.reject()
+        }
+
+        onOpened: forceActiveFocus()
+        onClosed: gameBoard.forceActiveFocus()
+    }
+
+    component GameLabel : Label {
+        color: helper.myColors.fgdark
+        font.family: helper.fontFamily
+        font.pixelSize: 16
+        wrapMode: Text.WordWrap
+        width: parent.width
+        horizontalAlignment: Text.AlignHCenter
+    }
 
     Shortcut {
         sequence: "Ctrl+N"
@@ -255,6 +353,7 @@ ApplicationWindow {
     color: helper.myColors.bglight
 
     Item {
+        id: gameBoard
         width: 500
         height: 670
         anchors.centerIn: parent
@@ -417,8 +516,8 @@ ApplicationWindow {
             radius: 20
 
             Grid {
-                x: 15;
-                y: 15;
+                x: 15
+                y: 15
                 rows: 4; columns: 4; spacing: 15
 
                 Repeater {
@@ -443,47 +542,38 @@ ApplicationWindow {
         }
 
 
-        Dialog {
+        GameDialog {
             id: demoWarningDialog
             title: qsTr("Demo Mode")
-            modal: true
-            anchors.centerIn: Overlay.overlay
             standardButtons: Dialog.Ok
-            Label {
+            GameLabel {
                 text: qsTr("Running in demo mode.\nNo settings or scores will be saved.")
             }
         }
 
-        Dialog {
+        GameDialog {
             id: changeLanguageDialog
             title: qsTr("Language Setting Hint")
-            modal: true
-            anchors.centerIn: Overlay.overlay
             standardButtons: Dialog.Ok
-            Label {
+            GameLabel {
                 text: qsTr("Please restart the program to make the language setting take effect.")
             }
         }
 
-        Dialog {
+        GameDialog {
             id: aboutDialog
             title: qsTr("About 2048-Qt")
-            modal: true
-            anchors.centerIn: Overlay.overlay
             standardButtons: Dialog.Ok
-            Label {
+            GameLabel {
                 text: qsTr("2048-Qt\nVersion " + settings.getVersion() + "\n2015 Qiaoyong Zhong")
             }
         }
 
-        Dialog {
+        GameDialog {
             id: deadMessage
-            modal: true
-            anchors.centerIn: Overlay.overlay
             standardButtons: Dialog.Retry | Dialog.Abort
-            Label {
+            GameLabel {
                 text: qsTr("Game Over!")
-                anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: 24
                 font.bold: true
             }
@@ -491,14 +581,11 @@ ApplicationWindow {
             onRejected: MyScript.cleanUpAndQuit()
         }
 
-        Dialog {
+        GameDialog {
             id: winMessage
-            modal: true
-            anchors.centerIn: Overlay.overlay
             standardButtons: Dialog.Yes | Dialog.No
-            Label {
+            GameLabel {
                 text: qsTr("You win! Continue playing?")
-                anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: 24
                 font.bold: true
             }
